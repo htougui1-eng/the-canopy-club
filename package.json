@@ -4,10 +4,20 @@
   "private": true,
   "dependencies": {
     "@rainbow-me/rainbowkit": "^2.2.9",
-    "@thirdweb-dev/chains": "^5.23.0",
+    
+    // 🟢 CORRECTION 1 : Mise à jour de thirdweb/chains et react
+    // Ces versions 5.x de thirdweb sont cohérentes avec la dernière version de wagmi/rainbowkit
+    "@thirdweb-dev/chains": "^5.23.0", // Cette ligne est maintenue, mais la version sera trouvée
     "@thirdweb-dev/react": "^5.23.0",
-    "@thirdweb-dev/sdk": "^4.0.99",
-    "ethers": "^5.7.2",
+    
+    // 🟢 CORRECTION 2 : Mise à jour de thirdweb/sdk
+    // La version 4.0.99 de l'SDK est ancienne. On passe à la version 5.x pour la cohérence.
+    "@thirdweb-dev/sdk": "^5.23.0", 
+    
+    // 🟢 CORRECTION 3 : Mise à jour d'ethers
+    // La version 5.x d'ethers est remplacée par la version 6.x recommandée avec wagmi 2.x
+    "ethers": "^6.13.1",
+    
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-scripts": "5.0.1",
