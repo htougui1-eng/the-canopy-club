@@ -13,7 +13,7 @@ import "@rainbow-me/rainbowkit/styles.css";
 
 const config = getDefaultConfig({
   appName: "The Canopy Club",
-  projectId: "TON_WALLETCONNECT_ID",
+  projectId: "022f4d2b264c02a364fc9ff43079a707",
   chains: [mainnet, sepolia],
   transports: {
     [mainnet.id]: http(),
