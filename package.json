@@ -7,7 +7,7 @@
     "@thirdweb-dev/chains": "^5.23.0",
     "@thirdweb-dev/react": "^5.23.0",
     "@thirdweb-dev/sdk": "^4.0.99",
-    "ethers": "^6.13.0",
+    "ethers": "^5.7.2",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-scripts": "5.0.1",
@@ -23,7 +23,15 @@
     "extends": ["react-app", "react-app/jest"]
   },
   "browserslist": {
-    "production": [">0.2%", "not dead", "not op_mini all"],
-    "development": ["last 1 chrome version", "last 1 firefox version", "last 1 safari version"]
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
   }
 }
