@@ -4,22 +4,18 @@
   "private": true,
   "dependencies": {
     "@rainbow-me/rainbowkit": "^2.2.9",
-    "@thirdweb-dev/react": "^5.24.0",
+    "@thirdweb-dev/chains": "^5.23.0",
+    "@thirdweb-dev/react": "^5.23.0",
     "@thirdweb-dev/sdk": "^4.0.99",
-    "@wagmi/chains": "^1.5.0",
-    "@wagmi/core": "^2.19.2",
-    "ethers": "^5.7.2",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "react-icons": "^5.2.1",
+    "ethers": "^6.13.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
     "react-scripts": "5.0.1",
-    "web-vitals": "^2.1.4",
-    "viem": "^2.38.6",
     "wagmi": "^2.19.2"
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "npm install --legacy-peer-deps && react-scripts build",
+    "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
@@ -28,10 +24,6 @@
   },
   "browserslist": {
     "production": [">0.2%", "not dead", "not op_mini all"],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
+    "development": ["last 1 chrome version", "last 1 firefox version", "last 1 safari version"]
   }
 }
