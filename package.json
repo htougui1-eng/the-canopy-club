@@ -4,10 +4,15 @@
   "private": true,
   "dependencies": {
     "@rainbow-me/rainbowkit": "^2.2.9",
-    "@thirdweb-dev/chains": "^5.23.0",
-    "@thirdweb-dev/react": "^5.23.0",
-    "@thirdweb-dev/sdk": "^5.23.0",
+    
+    // 🟢 PASSAGE AUX DERNIÈRES VERSIONS STABLES (5.110.3)
+    "@thirdweb-dev/chains": "^5.110.3",
+    "@thirdweb-dev/react": "^5.110.3",
+    "@thirdweb-dev/sdk": "^5.110.3",
+    
+    // Ethers 6 pour la compatibilité avec wagmi 2.x
     "ethers": "^6.13.1",
+    
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-scripts": "5.0.1",
