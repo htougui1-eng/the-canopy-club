@@ -1,24 +1,24 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import { WagmiProvider, createConfig, http } from "wagmi";
+import { WagmiProvider, http } from "wagmi";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import {
   RainbowKitProvider,
   getDefaultConfig,
-  darkTheme
+  darkTheme,
 } from "@rainbow-me/rainbowkit";
-import { mainnet, sepolia } from "wagmi/chains";
+import { mainnet, baseSepolia } from "wagmi/chains";
 import App from "./App";
 import "@rainbow-me/rainbowkit/styles.css";
 
 const config = getDefaultConfig({
   appName: "The Canopy Club",
   projectId: "022f4d2b264c02a364fc9ff43079a707",
-  chains: [mainnet, sepolia],
+  chains: [mainnet, baseSepolia],
   transports: {
     [mainnet.id]: http(),
-    [sepolia.id]: http()
-  }
+    [baseSepolia.id]: http(),
+  },
 });
 
 const queryClient = new QueryClient();
