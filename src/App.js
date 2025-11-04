@@ -4,11 +4,11 @@ import { baseSepolia } from "wagmi/chains";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import {
   ThirdwebProvider,
-  useReadContract, // 1. Remplacement de useTokenBalance
+  useReadContract,
 } from "thirdweb/react";
 import { getContract, createThirdwebClient } from "thirdweb";
-import { balanceOf, symbol } from "thirdweb/extensions/erc20"; // 2. Importation des méthodes ERC20
-import { toEther } from "thirdweb/utils"; // 3. Importation pour formater le solde
+// import { balanceOf, symbol } from "thirdweb/extensions/erc20"; // <-- LIGNE SUPPRIMÉE
+import { toEther } from "thirdweb/utils";
 import "./App.css";
 
 const client = createThirdwebClient({
@@ -28,17 +28,17 @@ function Dashboard() {
     });
   }, []);
 
-  // 4. Remplacement de useTokenBalance par useReadContract pour le solde
+  // 4. Appel de useReadContract avec le nom de la fonction (string)
   const { data: balanceData, isLoading: isBalanceLoading } = useReadContract({
     contract: contract,
-    method: balanceOf,
-    params: [address || ""], // Fournir une adresse vide si non connecté
+    method: "balanceOf", // <-- CORRIGÉ
+    params: [address || ""],
   });
 
-  // 5. Ajout d'un appel pour obtenir le symbole
+  // 5. Appel de useReadContract avec le nom de la fonction (string)
   const { data: symbolData, isLoading: isSymbolLoading } = useReadContract({
     contract: contract,
-    method: symbol,
+    method: "symbol", // <-- CORRIGÉ
     params: [],
   });
 
@@ -55,7 +55,6 @@ function Dashboard() {
         isLoading ? (
           <p>Chargement du solde...</p>
         ) : (
-          // 6. Mise à jour de l'affichage
           <p>
             💰 Solde TTC : {balanceData ? toEther(balanceData) : "0"}{" "}
             {symbolData}
