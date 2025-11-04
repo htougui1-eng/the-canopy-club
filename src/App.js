@@ -1,7 +1,6 @@
 import React from "react";
-import { WagmiConfig, createClient, configureChains } from "wagmi";
+import { WagmiProvider, createConfig, http } from "wagmi";
 import { mainnet, baseSepolia } from "wagmi/chains";
-import { publicProvider } from "wagmi/providers/public";
 import {
   RainbowKitProvider,
   getDefaultWallets,
@@ -16,27 +15,29 @@ import {
 import { ethers } from "ethers";
 import "./App.css";
 
-const { chains, provider } = configureChains(
-  [baseSepolia, mainnet],
-  [publicProvider()]
-);
+const chains = [baseSepolia, mainnet];
 
 const { connectors } = getDefaultWallets({
   appName: "The Canopy Club",
+  projectId: "022f4d2b264c02a364fc9ff43079a707",
   chains,
 });
 
-const wagmiClient = createClient({
+const config = createConfig({
   autoConnect: true,
   connectors,
-  provider,
+  chains,
+  transports: {
+    [mainnet.id]: http(),
+    [baseSepolia.id]: http(),
+  },
 });
 
 const TTC_CONTRACT = "0x0F91d4ae682F36e7F2275a0cfF68eB176b085A3c";
 
 function Dashboard() {
   const address = useAddress();
-  const { contract } = useContract(TTC_CONTRACT);
+  const { contract } = useContract(T TTC_CONTRACT);
   const { data: balance, isLoading } = useTokenBalance(contract, address);
 
   return (
@@ -63,12 +64,12 @@ function Dashboard() {
 
 export default function App() {
   return (
-    <WagmiConfig client={wagmiClient}>
+    <WagmiProvider config={config}>
       <RainbowKitProvider chains={chains}>
         <ThirdwebProvider>
           <Dashboard />
         </ThirdwebProvider>
       </RainbowKitProvider>
-    </WagmiConfig>
+    </WagmiProvider>
   );
 }
