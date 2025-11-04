@@ -4,7 +4,6 @@
   "private": true,
   "dependencies": {
     "@rainbow-me/rainbowkit": "^2.2.9",
-    "@thirdweb-dev/chains": "^5.110.3",
     "@thirdweb-dev/react": "^5.110.3",
     "@thirdweb-dev/sdk": "^5.110.3",
     "ethers": "^6.13.1",
