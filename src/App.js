@@ -9,9 +9,8 @@ import {
 import {
   ThirdwebProvider,
   useTokenBalance,
-  createThirdwebClient,
-} from "thirdweb/react";
-import { getContract } from "thirdweb";
+} from "thirdweb/react"; // <-- 'createThirdwebClient' retiré d'ici
+import { getContract, createThirdwebClient } from "thirdweb"; // <-- 'createThirdwebClient' ajouté ici
 import { ethers } from "ethers";
 import "./App.css";
 
