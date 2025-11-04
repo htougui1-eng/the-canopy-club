@@ -37,7 +37,7 @@ const TTC_CONTRACT = "0x0F91d4ae682F36e7F2275a0cfF68eB176b085A3c";
 
 function Dashboard() {
   const address = useAddress();
-  const { contract } = useContract(T TTC_CONTRACT);
+  const { contract } = useContract(TTC_CONTRACT);
   const { data: balance, isLoading } = useTokenBalance(contract, address);
 
   return (
