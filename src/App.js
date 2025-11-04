@@ -1,5 +1,4 @@
-import React from "react";
-// ⬇️ 'useAccount' remplace 'useAddress'
+import React, { useMemo } from "react";
 import { WagmiProvider, createConfig, http, useAccount } from "wagmi";
 import { mainnet, baseSepolia } from "wagmi/chains";
 import {
@@ -9,11 +8,16 @@ import {
 } from "@rainbow-me/rainbowkit";
 import {
   ThirdwebProvider,
-  useContract,
   useTokenBalance,
+  createThirdwebClient,
 } from "thirdweb/react";
+import { getContract } from "thirdweb";
 import { ethers } from "ethers";
 import "./App.css";
+
+const client = createThirdwebClient({
+  clientId: "5a24a9d93adac32e424173823edafb05",
+});
 
 const chains = [baseSepolia, mainnet];
 
@@ -36,10 +40,20 @@ const config = createConfig({
 const TTC_CONTRACT = "0x0F91d4ae682F36e7F2275a0cfF68eB176b085A3c";
 
 function Dashboard() {
-  // ⬇️ Remplacement de 'useAddress' par 'useAccount'
   const { address } = useAccount();
-  const { contract } = useContract(TTC_CONTRACT);
-  const { data: balance, isLoading } = useTokenBalance(contract, address);
+
+  const contract = useMemo(() => {
+    return getContract({
+      client,
+      chain: baseSepolia,
+      address: TTC_CONTRACT,
+    });
+  }, []);
+
+  const { data: balance, isLoading } = useTokenBalance({
+    contract: contract,
+    address: address,
+  });
 
   return (
     <div className="App">
