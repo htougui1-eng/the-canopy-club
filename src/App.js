@@ -1,14 +1,15 @@
 import React from "react";
-import { WagmiProvider, createConfig, http } from "wagmi";
+// ⬇️ 'useAddress' est maintenant importé d'ici (wagmi)
+import { WagmiProvider, createConfig, http, useAddress } from "wagmi";
 import { mainnet, baseSepolia } from "wagmi/chains";
 import {
   RainbowKitProvider,
   getDefaultWallets,
   ConnectButton,
 } from "@rainbow-me/rainbowkit";
+// ⬇️ 'useAddress' a été retiré d'ici (thirdweb)
 import {
   ThirdwebProvider,
-  useAddress,
   useContract,
   useTokenBalance,
 } from "thirdweb/react";
@@ -36,6 +37,7 @@ const config = createConfig({
 const TTC_CONTRACT = "0x0F91d4ae682F36e7F2275a0cfF68eB176b085A3c";
 
 function Dashboard() {
+  // Le code ici n'a pas besoin de changer, 'useAddress' est juste importé d'ailleurs
   const address = useAddress();
   const { contract } = useContract(TTC_CONTRACT);
   const { data: balance, isLoading } = useTokenBalance(contract, address);
