@@ -8,9 +8,10 @@ import {
 } from "@rainbow-me/rainbowkit";
 import {
   ThirdwebProvider,
-  useTokenBalance,
-} from "thirdweb/react"; // <-- 'createThirdwebClient' retiré d'ici
-import { getContract, createThirdwebClient } from "thirdweb"; // <-- 'createThirdwebClient' ajouté ici
+  useReadContract, // 1. Remplacer 'useTokenBalance'
+} from "thirdweb/react";
+import { getContract, createThirdwebClient } from "thirdweb";
+import { balanceOf } from "thirdweb/extensions/erc20"; // 2. Importer l'extension
 import { ethers } from "ethers";
 import "./App.css";
 
@@ -49,10 +50,14 @@ function Dashboard() {
     });
   }, []);
 
-  const { data: balance, isLoading } = useTokenBalance({
-    contract: contract,
-    address: address,
-  });
+  // 3. Remplacer l'appel du hook
+  const { data: balance, isLoading } = useReadContract(
+    balanceOf, // La fonction d'extension
+    {
+      contract: contract,
+      address: address, // L'adresse du portefeuille à vérifier
+    }
+  );
 
   return (
     <div className="App">
@@ -66,6 +71,7 @@ function Dashboard() {
           <p>Chargement du solde...</p>
         ) : (
           <p>
+            {/* Le format de 'balance' est le même, donc ceci fonctionne toujours */}
             💰 Solde TTC : {balance?.displayValue} {balance?.symbol}
           </p>
         )
