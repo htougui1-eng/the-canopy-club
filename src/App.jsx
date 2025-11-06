@@ -2,7 +2,7 @@ import React, { useMemo, useState } from "react";
 import { Routes, Route, Link } from "react-router-dom";
 import { HashLink } from "react-router-hash-link";
 import { useAccount } from "wagmi";
-import { baseSepolia } from "wagmi/chains";
+import { baseSepolia } from "wagmi/chains"; // CORRIGÉ ICI
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import {
   ThirdwebProvider,
@@ -527,7 +527,7 @@ function DaoPage() {
   const [proposalTitle, setProposalTitle] = useState("");
   const [proposalDesc, setProposalDesc] = useState("");
 
-  const isNftBalanceLoading = false;
+  const isNftBalanceLoading = false; 
   const hasNft = true; // Simulation: Changez "true" à "false" pour tester
 
   const proposals = [
