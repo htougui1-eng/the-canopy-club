@@ -1,12 +1,24 @@
-import React, { useMemo } from "react";
+import React, { useMemo, useState } from "react"; // Ajout de useState
 import { useAccount } from "wagmi";
 import { baseSepolia } from "wagmi/chains";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
-import { ThirdwebProvider, useReadContract } from "thirdweb/react";
-import { getContract, createThirdwebClient } from "thirdweb";
+import {
+  ThirdwebProvider,
+  useReadContract,
+  TransactionButton, // Pour les boutons de transaction
+} from "thirdweb/react";
+import {
+  getContract,
+  createThirdwebClient,
+  prepareContractCall, // Pour préparer les transactions
+  toWei, // Pour convertir les montants (ex: "100" -> 100000000000000000000)
+} from "thirdweb";
 import { toEther } from "thirdweb/utils";
-// Ajout des nouvelles icônes pour la section Tokenomics
-import { Wallet, Target, Gem, Sprout, Coins, PieChart, ArrowRight } from "lucide-react";
+// Ajout des nouvelles icônes
+import {
+  Wallet, Target, Gem, Sprout, Coins, PieChart, ArrowRight,
+  Database, Lock, Undo // Icônes pour le Staking
+} from "lucide-react";
 import "./App.css";
 
 const client = createThirdwebClient({
@@ -14,33 +26,12 @@ const client = createThirdwebClient({
 });
 
 const TTC_CONTRACT = "0x0F91d4ae682F36e7F2275a0cfF68eB176b085A3c";
+// ADRESSE FICTIVE - à remplacer par votre vrai contrat de staking
+const STAKING_CONTRACT = "0x12345678900000000000000000000000000StakE";
 
-// --- COMPOSANT HERO (inchangé) ---
-function Hero() {
-  const { address } = useAccount();
-
-  const contract = useMemo(() => {
-    return getContract({
-      client,
-      chain: baseSepolia,
-      address: TTC_CONTRACT,
-    });
-  }, []);
-
-  const { data: balanceData, isLoading: isBalanceLoading } = useReadContract({
-    contract: contract,
-    method: "balanceOf",
-    params: [address || ""],
-  });
-
-  const { data: symbolData, isLoading: isSymbolLoading } = useReadContract({
-    contract: contract,
-    method: "symbol",
-    params: [],
-  });
-
-  const isLoading = isBalanceLoading || isSymbolLoading;
-
+// --- COMPOSANT HERO (Simplifié) ---
+// Il reçoit maintenant les données via les "props"
+function Hero({ address, isLoading, balanceData, symbolData }) {
   return (
     <div className="min-h-screen bg-slate-900 text-white flex flex-col items-center justify-center p-8 text-center">
       <h1 className="text-6xl font-bold text-green-400 mb-4">
@@ -121,13 +112,11 @@ function AboutSection() {
   );
 }
 
-// --- NOUVEAU COMPOSANT : TOKENOMICS / PRESALE ---
+// --- COMPOSANT TOKENOMICS (inchangé) ---
 function TokenomicsSection() {
   return (
     <section className="bg-slate-900 text-white py-20 px-8">
       <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-12 items-center">
-        
-        {/* Partie 1: Informations Tokenomics */}
         <div className="text-center md:text-left">
           <h2 className="text-4xl font-bold mb-6">
             Tokenomics <span className="text-green-400">$TTC</span>
@@ -135,7 +124,6 @@ function TokenomicsSection() {
           <p className="text-lg text-gray-400 mb-8">
             Une économie équilibrée conçue pour la croissance à long terme et le financement de nos projets écologiques.
           </p>
-          
           <div className="space-y-4">
             <div className="flex items-center bg-slate-800 p-4 rounded-lg">
               <PieChart className="text-green-400 h-6 w-6 mr-4" />
@@ -155,13 +143,10 @@ function TokenomicsSection() {
             </div>
           </div>
         </div>
-
-        {/* Partie 2: Module de Prévente */}
         <div className="bg-slate-800 p-8 rounded-lg shadow-2xl border border-green-400/30">
           <h3 className="text-3xl font-bold text-center mb-6 text-green-400">
             Participer à la Prévente
           </h3>
-          
           <div className="space-y-4 mb-6">
             <div>
               <label htmlFor="ethAmount" className="block text-sm font-medium text-gray-300 mb-1">
@@ -187,32 +172,256 @@ function TokenomicsSection() {
               />
             </div>
           </div>
-
           <button className="w-full bg-green-500 text-slate-900 font-bold py-3 rounded-lg text-lg hover:bg-green-400 transition-all duration-300 flex items-center justify-center space-x-2">
             <span>Acheter $TTC</span>
             <ArrowRight className="h-5 w-5" />
           </button>
-          
           <p className="text-center text-gray-400 text-xs mt-4">
             Ceci est une simulation. Taux : 1 ETH = 10,000 TTC
           </p>
         </div>
+      </div>
+    </section>
+  );
+}
 
+// --- NOUVEAU COMPOSANT : STAKING ---
+function StakingSection({ address, isLoading, ttcBalance, symbol, ttcContract, stakingContract }) {
+  const [activeTab, setActiveTab] = useState("stake"); // Gère l'onglet (stake/unstake)
+  const [stakeAmount, setStakeAmount] = useState("");
+  const [unstakeAmount, setUnstakeAmount] = useState("");
+
+  // Lire le solde staké (en supposant que le contrat a une fonction 'stakedBalance')
+  const { data: stakedBalanceData, isLoading: isStakedBalanceLoading } = useReadContract({
+    contract: stakingContract,
+    method: "stakedBalance", // NOTE : Vous devrez remplacer par le vrai nom de la fonction
+    params: [address || ""],
+  });
+
+  const stakedBalance = stakedBalanceData ? toEther(stakedBalanceData) : "0";
+  const walletBalance = ttcBalance ? toEther(ttcBalance) : "0";
+
+  if (isLoading || isStakedBalanceLoading) {
+    return (
+      <section className="bg-slate-950 text-white py-20 px-8">
+        <div className="max-w-xl mx-auto text-center">
+          <p>Chargement du module de Staking...</p>
+        </div>
+      </section>
+    );
+  }
+
+  return (
+    <section className="bg-slate-950 text-white py-20 px-8">
+      <div className="max-w-xl mx-auto">
+        <h2 className="text-4xl font-bold text-center mb-8">
+          Staking <span className="text-green-400">$TTC</span>
+        </h2>
+
+        {/* Info Solde Staké */}
+        <div className="bg-slate-800 p-6 rounded-lg shadow-lg mb-8 text-center">
+          <Lock className="text-green-400 h-10 w-10 mx-auto mb-3" />
+          <h3 className="text-lg text-gray-400">Votre Solde Staké</h3>
+          <p className="text-3xl font-bold text-green-400">
+            {stakedBalance} {symbol}
+          </p>
+        </div>
+
+        {/* Module de Staking (avec onglets) */}
+        <div className="bg-slate-900 p-8 rounded-lg shadow-2xl">
+          {/* Onglets */}
+          <div className="flex mb-6 border-b border-slate-700">
+            <button
+              onClick={() => setActiveTab("stake")}
+              className={`py-3 px-6 text-lg font-semibold ${
+                activeTab === "stake"
+                  ? "border-b-2 border-green-400 text-green-400"
+                  : "text-gray-500 hover:text-gray-300"
+              }`}
+            >
+              <Database className="h-5 w-5 inline mr-2" />
+              Stake
+            </button>
+            <button
+              onClick={() => setActiveTab("unstake")}
+              className={`py-3 px-6 text-lg font-semibold ${
+                activeTab === "unstake"
+                  ? "border-b-2 border-green-400 text-green-400"
+                  : "text-gray-500 hover:text-gray-300"
+              }`}
+            >
+              <Undo className="h-5 w-5 inline mr-2" />
+              Unstake
+            </button>
+          </div>
+
+          {/* Contenu de l'onglet Stake */}
+          {activeTab === "stake" && (
+            <div>
+              <div className="flex justify-between items-baseline mb-2">
+                <label htmlFor="stakeAmount" className="block text-sm font-medium text-gray-300">
+                  Montant à Staker
+                </label>
+                <span className="text-xs text-gray-400">
+                  Solde: {walletBalance} {symbol}
+                </span>
+              </div>
+              <div className="flex space-x-2">
+                <input 
+                  type="number" 
+                  id="stakeAmount"
+                  value={stakeAmount}
+                  onChange={(e) => setStakeAmount(e.target.value)}
+                  placeholder="0" 
+                  className="flex-grow p-3 rounded-md bg-slate-800 border border-slate-700 text-white focus:outline-none focus:ring-2 focus:ring-green-400"
+                />
+                <button 
+                  onClick={() => setStakeAmount(walletBalance)}
+                  className="px-4 py-2 bg-slate-700 rounded-md text-sm font-bold hover:bg-slate-600"
+                >
+                  Max
+                </button>
+              </div>
+              
+              <TransactionButton
+                transaction={() =>
+                  prepareContractCall({
+                    contract: stakingContract,
+                    method: "stake", // NOTE : Remplacer par la vraie fonction
+                    params: [toWei(stakeAmount)], // Convertit "100" en 100000000000000000000
+                  })
+                }
+                onTransactionSent={() => console.log("Transaction envoyée...")}
+                onTransactionConfirmed={() => {
+                  console.log("Staking réussi !");
+                  setStakeAmount("");
+                }}
+                className="!w-full !bg-green-500 !text-slate-900 !font-bold !py-3 !rounded-lg !text-lg !mt-6 !hover:bg-green-400 !transition-all !duration-300"
+              >
+                Staker {stakeAmount || 0} {symbol}
+              </TransactionButton>
+            </div>
+          )}
+
+          {/* Contenu de l'onglet Unstake */}
+          {activeTab === "unstake" && (
+            <div>
+              <div className="flex justify-between items-baseline mb-2">
+                <label htmlFor="unstakeAmount" className="block text-sm font-medium text-gray-300">
+                  Montant à "Unstake"
+                </label>
+                <span className="text-xs text-gray-400">
+                  Staké: {stakedBalance} {symbol}
+                </span>
+              </div>
+              <div className="flex space-x-2">
+                <input 
+                  type="number" 
+                  id="unstakeAmount"
+                  value={unstakeAmount}
+                  onChange={(e) => setUnstakeAmount(e.target.value)}
+                  placeholder="0" 
+                  className="flex-grow p-3 rounded-md bg-slate-800 border border-slate-700 text-white focus:outline-none focus:ring-2 focus:ring-green-400"
+                />
+                <button 
+                  onClick={() => setUnstakeAmount(stakedBalance)}
+                  className="px-4 py-2 bg-slate-700 rounded-md text-sm font-bold hover:bg-slate-600"
+                >
+                  Max
+                </button>
+              </div>
+
+              <TransactionButton
+                transaction={() =>
+                  prepareContractCall({
+                    contract: stakingContract,
+                    method: "unstake", // NOTE : Remplacer par la vraie fonction
+                    params: [toWei(unstakeAmount)],
+                  })
+                }
+                onTransactionSent={() => console.log("Transaction envoyée...")}
+                onTransactionConfirmed={() => {
+                  console.log("Unstake réussi !");
+                  setUnstakeAmount("");
+                }}
+                className="!w-full !bg-gray-500 !text-white !font-bold !py-3 !rounded-lg !text-lg !mt-6 !hover:bg-gray-400 !transition-all !duration-300"
+              >
+                Unstake {unstakeAmount || 0} {symbol}
+              </TransactionButton>
+            </div>
+          )}
+        </div>
       </div>
     </section>
   );
 }
 
 
+// --- NOUVEAU COMPOSANT PARENT : ProjectPage ---
+// Ce composant gère toute la logique Web3 et la passe aux enfants
+function ProjectPage() {
+  const { address } = useAccount();
+
+  // 1. Définir les contrats
+  const ttcContract = useMemo(() => {
+    return getContract({ client, chain: baseSepolia, address: TTC_CONTRACT });
+  }, []);
+
+  const stakingContract = useMemo(() => {
+    return getContract({ client, chain: baseSepolia, address: STAKING_CONTRACT });
+  }, []);
+
+  // 2. Lire les données du contrat $TTC
+  const { data: balanceData, isLoading: isBalanceLoading } = useReadContract({
+    contract: ttcContract,
+    method: "balanceOf",
+    params: [address || ""],
+  });
+
+  const { data: symbolData, isLoading: isSymbolLoading } = useReadContract({
+    contract: ttcContract,
+    method: "symbol",
+    params: [],
+  });
+  
+  // 3. Lire les données du contrat de Staking
+  const { data: stakedBalanceData, isLoading: isStakedLoading } = useReadContract({
+    contract: stakingContract,
+    method: "stakedBalance", // NOTE : À remplacer par votre vraie fonction
+    params: [address || ""],
+  });
+
+  const isLoading = isBalanceLoading || isSymbolLoading || isStakedLoading;
+
+  return (
+    <main>
+      <Hero 
+        address={address}
+        isLoading={isLoading}
+        balanceData={balanceData}
+        symbolData={symbolData}
+      />
+      <AboutSection />
+      <TokenomicsSection />
+      <StakingSection 
+        address={address}
+        isLoading={isLoading}
+        ttcBalance={balanceData}
+        stakedBalance={stakedBalanceData}
+        symbol={symbolData}
+        ttcContract={ttcContract}
+        stakingContract={stakingContract}
+      />
+    </main>
+  );
+}
+
 // --- COMPOSANT APP (Mis à jour) ---
+// Affiche la page principale du projet
 export default function App() {
   return (
     <ThirdwebProvider>
-      <main>
-        <Hero />
-        <AboutSection />
-        <TokenomicsSection />
-      </main>
+      <ProjectPage />
     </ThirdwebProvider>
   );
 }
