@@ -2,7 +2,7 @@ import React, { useMemo, useState } from "react";
 import { Routes, Route, Link } from "react-router-dom";
 import { HashLink } from "react-router-hash-link";
 import { useAccount } from "wagmi";
-import { baseSepolia } from "wagmi/chains"; // CORRIGÉ ICI
+import { baseSepolia } from "wagmi/chains";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import {
   ThirdwebProvider,
@@ -120,6 +120,9 @@ function PresaleModule() {
 }
 
 function Hero({ address, isLoading, balanceData, symbolData }) {
+  
+  const formattedBalance = balanceData ? toEther(balanceData) : "0";
+
   return (
     <div id="hero" className="min-h-screen bg-slate-900 text-white flex items-center p-8 pt-24">
       <div className="container mx-auto max-w-7xl grid md:grid-cols-2 gap-12 items-center">
@@ -142,7 +145,7 @@ function Hero({ address, isLoading, balanceData, symbolData }) {
                   <p className="text-xl">
                     Solde :{" "}
                     <span className="font-bold text-green-400">
-                      {balanceData ? toEther(balanceData) : "0"} {symbolData}
+                      {formattedBalance} {symbolData}
                     </span>
                   </p>
                 </div>
@@ -463,7 +466,7 @@ function ProjectPage() {
   const { data: balanceData, isLoading: isBalanceLoading } = useReadContract({
     contract: ttcContract,
     method: "balanceOf",
-    params: [address || ""],
+    params: { account: address || "" }, // CORRECTION APPLIQUÉE ICI
   });
 
   const { data: symbolData, isLoading: isSymbolLoading } = useReadContract({
