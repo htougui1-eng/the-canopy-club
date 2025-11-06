@@ -23,7 +23,7 @@ import {
 import "./App.css";
 
 const client = createThirdwebClient({
-  clientId: "5a24a9d93adac32e424173823edafb05",
+  clientId: "8de3cb39806dd7770e0fa5f528e8d754",
 });
 
 const TTC_CONTRACT = "0x0F91d4ae682F36e7F2275a0cfF68eB176b085A3c";
