@@ -7,7 +7,7 @@ import {
   getDefaultConfig,
   darkTheme,
 } from "@rainbow-me/rainbowkit";
-import { mainnet, baseSepolia } from "wagmi/chains";
+import { mainnet, baseSepolia } from "wagmi/chains"; // CORRIGÉ ICI
 import { BrowserRouter } from "react-router-dom";
 import App from "./App";
 import "@rainbow-me/rainbowkit/styles.css";
@@ -15,10 +15,10 @@ import "@rainbow-me/rainbowkit/styles.css";
 const config = getDefaultConfig({
   appName: "The Canopy Club",
   projectId: "022f4d2b264c02a364fc9ff43079a707",
-  chains: [mainnet, baseSepolia],
+  chains: [mainnet, baseSepolia], // CORRIGÉ ICI
   transports: {
     [mainnet.id]: http(),
-    [baseSepolia.id]: http(),
+    [baseSepolia.id]: http(), // CORRIGÉ ICI
   },
 });
 
