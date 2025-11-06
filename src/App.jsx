@@ -380,4 +380,26 @@ function DetailsPage() {
             Vous pouvez développer en profondeur votre mission, expliquer la technologie derrière
             le staking, ou présenter en détail la roadmap de "The Canopy Club".
           </p>
-          <h2>
+          <h2>Roadmap Détaillée</h2>
+          <ul>
+            <li>Phase 1 : Lancement du token $TTC et de la collection NFT.</li>
+            <li>Phase 2 : Déploiement du contrat de Staking et partenariats écologiques.</li>
+            <li>Phase 3 : Lancement de la plateforme de vote (DAO).</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export default function App() {
+  return (
+    <ThirdwebProvider>
+      <Navbar />
+      <Routes>
+        <Route path="/" element={<ProjectPage />} />
+        <Route path="/details" element={<DetailsPage />} />
+      </Routes>
+    </ThirdwebProvider>
+  );
+}
