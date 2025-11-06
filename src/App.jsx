@@ -1,5 +1,6 @@
 import React, { useMemo, useState } from "react";
 import { Routes, Route, Link } from "react-router-dom";
+import { HashLink } from "react-router-hash-link";
 import { useAccount } from "wagmi";
 import { baseSepolia } from "wagmi/chains";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
@@ -31,21 +32,52 @@ const TTC_CONTRACT = "0x0F91d4ae682F36e7F2275a0cfF68eB176b085A3c";
 const STAKING_CONTRACT = "0x12345678900000000000000000000000000StakE"; 
 const OPENSEA_COLLECTION_URL = "https://opensea.io/collection/the-canopy-club1"; 
 
+
+function Navbar() {
+  return (
+    <header className="sticky top-0 z-50 w-full bg-slate-900/80 backdrop-blur-sm border-b border-slate-800">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex justify-between items-center h-16">
+          <div className="flex-shrink-0">
+            <HashLink to="/#hero" className="text-2xl font-bold text-green-400">
+              The Canopy Club 🌿
+            </HashLink>
+          </div>
+          <nav className="hidden md:flex space-x-6">
+            <HashLink smooth to="/#about" className="text-gray-300 hover:text-green-400 transition-colors">
+              À Propos
+            </HashLink>
+            <HashLink smooth to="/#tokenomics" className="text-gray-300 hover:text-green-400 transition-colors">
+              Tokenomics
+            </HashLink>
+            <HashLink smooth to="/#nft" className="text-gray-300 hover:text-green-400 transition-colors">
+              NFT
+            </HashLink>
+            <Link to="/details" className="text-gray-300 hover:text-green-400 transition-colors">
+              En savoir plus
+            </Link>
+          </nav>
+          <div className="flex items-center">
+            <ConnectButton />
+          </div>
+        </div>
+      </div>
+    </header>
+  );
+}
+
 function Hero({ address, isLoading, balanceData, symbolData }) {
   return (
-    <div className="min-h-screen bg-slate-900 text-white flex flex-col items-center justify-center p-8 text-center">
-      <h1 className="text-6xl font-bold text-green-400 mb-4">
+    <div id="hero" className="min-h-screen bg-slate-900 text-white flex flex-col items-center justify-center p-8 text-center">
+      <h1 className="text-6xl font-bold text-green-400 mb-4 mt-16">
         The Canopy Club 🌿
       </h1>
       <h2 className="text-2xl text-gray-300 mb-10">
         Votre token pour un futur plus vert et technologique.
       </h2>
-      <div className="mb-8">
-        <ConnectButton />
-      </div>
 
       {address && (
-        <div className="bg-slate-800 p-6 rounded-lg shadow-lg">
+        <div className="bg-slate-800 p-6 rounded-lg shadow-lg mt-8">
           {isLoading ? (
             <p className="text-gray-400">Chargement du solde...</p>
           ) : (
@@ -63,7 +95,7 @@ function Hero({ address, isLoading, balanceData, symbolData }) {
       )}
 
       {!address && (
-        <p className="text-gray-500">
+        <p className="text-gray-500 mt-8">
           Connectez votre wallet pour voir votre solde TTC.
         </p>
       )}
@@ -73,7 +105,7 @@ function Hero({ address, isLoading, balanceData, symbolData }) {
 
 function AboutSection() {
   return (
-    <section className="bg-slate-950 text-white py-20 px-8">
+    <section id="about" className="bg-slate-950 text-white py-20 px-8">
       <div className="max-w-4xl mx-auto text-center">
         <h2 className="text-4xl font-bold mb-4">
           À Propos de <span className="text-green-400">The Canopy Club</span>
@@ -113,7 +145,7 @@ function AboutSection() {
 
 function TokenomicsSection() {
   return (
-    <section className="bg-slate-900 text-white py-20 px-8">
+    <section id="tokenomics" className="bg-slate-900 text-white py-20 px-8">
       <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-12 items-center">
         <div className="text-center md:text-left">
           <h2 className="text-4xl font-bold mb-6">
@@ -191,7 +223,7 @@ function NftSection() {
   ];
 
   return (
-    <section className="bg-slate-900 text-white py-20 px-8">
+    <section id="nft" className="bg-slate-900 text-white py-20 px-8">
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-12">
           <h2 className="text-4xl font-bold mb-4">
@@ -316,7 +348,7 @@ function DetailsPage() {
         <div className="prose prose-invert prose-lg text-gray-300">
           <p>
             C'est ici que vous placerez tous les détails supplémentaires de votre projet.
-          </p>
+          </Détails>
           <p>
             Vous pouvez développer en profondeur votre mission, expliquer la technologie derrière
             le staking, ou présenter en détail la roadmap de "The Canopy Club".
@@ -336,6 +368,7 @@ function DetailsPage() {
 export default function App() {
   return (
     <ThirdwebProvider>
+      <Navbar />
       <Routes>
         <Route path="/" element={<ProjectPage />} />
         <Route path="/details" element={<DetailsPage />} />
