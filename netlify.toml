@@ -1,6 +1,6 @@
 [build]
   command = "npm run build"
-  publish = "build"
+  publish = "dist" # <-- CHANGÉ de 'build' à 'dist'
 
 [build.environment]
-  CI = "false"
+  # CI = "false" <-- Vous n'en avez plus besoin, Vite gère mieux les avertissements.
