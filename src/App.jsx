@@ -424,11 +424,11 @@ function ProjectPage() {
 
   const ttcContract = useMemo(() => {
     return getContract({ client, chain: baseSepolia, address: TTC_CONTRACT });
-  }, [client]); // Ajout de 'client' comme dépendance
+  }, [client]);
 
   const stakingContract = useMemo(() => {
     return getContract({ client, chain: baseSepolia, address: STAKING_CONTRACT });
-  }, [client]); // Ajout de 'client' comme dépendance
+  }, [client]);
 
   const { data: balanceData, isLoading: isBalanceLoading } = useReadContract({
     contract: ttcContract,
@@ -457,6 +457,7 @@ function ProjectPage() {
       />
       <AboutSection />
       <TokenomicsSection />
+      {/*
       <StakingSection 
         address={address}
         isLoading={isLoading}
@@ -466,6 +467,7 @@ function ProjectPage() {
         ttcContract={ttcContract}
         stakingContract={stakingContract}
       />
+      */}
       <NftSection />
       <WhitepaperSection />
     </main>
