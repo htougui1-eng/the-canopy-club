@@ -2,13 +2,10 @@ import React, { useMemo } from "react";
 import { useAccount } from "wagmi";
 import { baseSepolia } from "wagmi/chains";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
-import {
-  ThirdwebProvider,
-  useReadContract,
-} from "thirdweb/react";
+import { ThirdwebProvider, useReadContract } from "thirdweb/react";
 import { getContract, createThirdwebClient } from "thirdweb";
-// import { balanceOf, symbol } from "thirdweb/extensions/erc20"; // <-- LIGNE SUPPRIMÉE
 import { toEther } from "thirdweb/utils";
+import { Wallet } from "lucide-react";
 import "./App.css";
 
 const client = createThirdwebClient({
@@ -17,7 +14,7 @@ const client = createThirdwebClient({
 
 const TTC_CONTRACT = "0x0F91d4ae682F36e7F2275a0cfF68eB176b085A3c";
 
-function Dashboard() {
+function Hero() {
   const { address } = useAccount();
 
   const contract = useMemo(() => {
@@ -28,40 +25,57 @@ function Dashboard() {
     });
   }, []);
 
-  // 4. Appel de useReadContract avec le nom de la fonction (string)
   const { data: balanceData, isLoading: isBalanceLoading } = useReadContract({
     contract: contract,
-    method: "balanceOf", // <-- CORRIGÉ
+    method: "balanceOf",
     params: [address || ""],
   });
 
-  // 5. Appel de useReadContract avec le nom de la fonction (string)
   const { data: symbolData, isLoading: isSymbolLoading } = useReadContract({
     contract: contract,
-    method: "symbol", // <-- CORRIGÉ
+    method: "symbol",
     params: [],
   });
 
   const isLoading = isBalanceLoading || isSymbolLoading;
 
   return (
-    <div className="App">
-      <h1>The Canopy Club 🌿</h1>
-      <h2>Token TTC Dashboard</h2>
+    <div className="min-h-screen bg-slate-900 text-white flex flex-col items-center justify-center p-8 text-center">
+      
+      <h1 className="text-6xl font-bold text-green-400 mb-4">
+        The Canopy Club 🌿
+      </h1>
+      
+      <h2 className="text-2xl text-gray-300 mb-10">
+        Votre token pour un futur plus vert et technologique.
+      </h2>
+      
+      <div className="mb-8">
+        <ConnectButton />
+      </div>
 
-      <ConnectButton />
+      {address && (
+        <div className="bg-slate-800 p-6 rounded-lg shadow-lg">
+          {isLoading ? (
+            <p className="text-gray-400">Chargement du solde...</p>
+          ) : (
+            <div className="flex items-center space-x-3">
+              <Wallet className="text-green-400" size={24} />
+              <p className="text-xl">
+                Solde :{" "}
+                <span className="font-bold text-green-400">
+                  {balanceData ? toEther(balanceData) : "0"} {symbolData}
+                </span>
+              </p>
+            </div>
+          )}
+        </div>
+      )}
 
-      {address ? (
-        isLoading ? (
-          <p>Chargement du solde...</p>
-        ) : (
-          <p>
-            💰 Solde TTC : {balanceData ? toEther(balanceData) : "0"}{" "}
-            {symbolData}
-          </p>
-        )
-      ) : (
-        <p>Connecte ton wallet pour voir ton solde TTC</p>
+      {!address && (
+        <p className="text-gray-500">
+          Connectez votre wallet pour voir votre solde TTC.
+        </p>
       )}
     </div>
   );
@@ -70,7 +84,7 @@ function Dashboard() {
 export default function App() {
   return (
     <ThirdwebProvider>
-      <Dashboard />
+      <Hero />
     </ThirdwebProvider>
   );
 }
