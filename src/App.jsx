@@ -5,7 +5,8 @@ import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { ThirdwebProvider, useReadContract } from "thirdweb/react";
 import { getContract, createThirdwebClient } from "thirdweb";
 import { toEther } from "thirdweb/utils";
-import { Wallet, Target, Gem, Sprout } from "lucide-react"; // Ajout des nouvelles icônes
+// Ajout des nouvelles icônes pour la section Tokenomics
+import { Wallet, Target, Gem, Sprout, Coins, PieChart, ArrowRight } from "lucide-react";
 import "./App.css";
 
 const client = createThirdwebClient({
@@ -79,29 +80,20 @@ function Hero() {
   );
 }
 
-// --- NOUVEAU COMPOSANT : ABOUT SECTION ---
+// --- COMPOSANT ABOUT (inchangé) ---
 function AboutSection() {
   return (
-    // Section avec un fond légèrement différent pour la démarquer
     <section className="bg-slate-950 text-white py-20 px-8">
       <div className="max-w-4xl mx-auto text-center">
-        
-        {/* Titre de la section */}
         <h2 className="text-4xl font-bold mb-4">
           À Propos de <span className="text-green-400">The Canopy Club</span>
         </h2>
-        
-        {/* Paragraphe de mission */}
         <p className="text-lg text-gray-400 mb-12">
           Notre mission est de fusionner la finance décentralisée avec des initiatives écologiques.
           Le token $TTC n'est pas seulement un actif ; c'est une participation à un écosystème durable
           où chaque transaction contribue à un avenir plus vert.
         </p>
-
-        {/* Grille pour les valeurs */}
         <div className="grid md:grid-cols-3 gap-8">
-          
-          {/* Valeur 1: Mission */}
           <div className="bg-slate-900 p-6 rounded-lg shadow-lg">
             <Target className="text-green-400 h-12 w-12 mx-auto mb-4" />
             <h3 className="text-2xl font-semibold mb-2">Notre Objectif</h3>
@@ -109,8 +101,6 @@ function AboutSection() {
               Financer des projets de reforestation et d'énergie renouvelable via la technologie blockchain.
             </p>
           </div>
-
-          {/* Valeur 2: Valeurs */}
           <div className="bg-slate-900 p-6 rounded-lg shadow-lg">
             <Gem className="text-green-400 h-12 w-12 mx-auto mb-4" />
             <h3 className="text-2xl font-semibold mb-2">Nos Valeurs</h3>
@@ -118,8 +108,6 @@ function AboutSection() {
               Transparence, durabilité et innovation. Chaque détenteur de $TTC fait partie de la solution.
             </p>
           </div>
-
-          {/* Valeur 3: Vision */}
           <div className="bg-slate-900 p-6 rounded-lg shadow-lg">
             <Sprout className="text-green-400 h-12 w-12 mx-auto mb-4" />
             <h3 className="text-2xl font-semibold mb-2">Notre Vision</h3>
@@ -127,8 +115,89 @@ function AboutSection() {
               Devenir le token de référence pour l'investissement à impact positif (Impact Investing) dans le Web3.
             </p>
           </div>
-
         </div>
+      </div>
+    </section>
+  );
+}
+
+// --- NOUVEAU COMPOSANT : TOKENOMICS / PRESALE ---
+function TokenomicsSection() {
+  return (
+    <section className="bg-slate-900 text-white py-20 px-8">
+      <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-12 items-center">
+        
+        {/* Partie 1: Informations Tokenomics */}
+        <div className="text-center md:text-left">
+          <h2 className="text-4xl font-bold mb-6">
+            Tokenomics <span className="text-green-400">$TTC</span>
+          </h2>
+          <p className="text-lg text-gray-400 mb-8">
+            Une économie équilibrée conçue pour la croissance à long terme et le financement de nos projets écologiques.
+          </p>
+          
+          <div className="space-y-4">
+            <div className="flex items-center bg-slate-800 p-4 rounded-lg">
+              <PieChart className="text-green-400 h-6 w-6 mr-4" />
+              <span><span className="font-bold">Supply Totale :</span> 100,000,000 TTC</span>
+            </div>
+            <div className="flex items-center bg-slate-800 p-4 rounded-lg">
+              <Coins className="text-green-400 h-6 w-6 mr-4" />
+              <span><span className="font-bold">Prévente :</span> 40% (40,000,000 TTC)</span>
+            </div>
+            <div className="flex items-center bg-slate-800 p-4 rounded-lg">
+              <Sprout className="text-green-400 h-6 w-6 mr-4" />
+              <span><span className="font-bold">Fonds Écologique :</span> 30% (30,000,000 TTC)</span>
+            </div>
+            <div className="flex items-center bg-slate-800 p-4 rounded-lg">
+              <Gem className="text-green-400 h-6 w-6 mr-4" />
+              <span><span className="font-bold">Liquidité & Staking :</span> 30% (30,000,000 TTC)</span>
+            </div>
+          </div>
+        </div>
+
+        {/* Partie 2: Module de Prévente */}
+        <div className="bg-slate-800 p-8 rounded-lg shadow-2xl border border-green-400/30">
+          <h3 className="text-3xl font-bold text-center mb-6 text-green-400">
+            Participer à la Prévente
+          </h3>
+          
+          <div className="space-y-4 mb-6">
+            <div>
+              <label htmlFor="ethAmount" className="block text-sm font-medium text-gray-300 mb-1">
+                Montant en ETH (Base Sepolia)
+              </label>
+              <input 
+                type="number" 
+                id="ethAmount"
+                placeholder="0.1" 
+                className="w-full p-3 rounded-md bg-slate-900 border border-slate-700 text-white focus:outline-none focus:ring-2 focus:ring-green-400"
+              />
+            </div>
+            <div>
+              <label htmlFor="ttcAmount" className="block text-sm font-medium text-gray-300 mb-1">
+                Vous recevrez (TTC)
+              </label>
+              <input 
+                type="number" 
+                id="ttcAmount"
+                placeholder="1000" 
+                disabled 
+                className="w-full p-3 rounded-md bg-slate-700 border border-slate-600 text-gray-400 cursor-not-allowed"
+              />
+            </div>
+          </div>
+
+          <button className="w-full bg-green-500 text-slate-900 font-bold py-3 rounded-lg text-lg hover:bg-green-400 transition-all duration-300 flex items-center justify-center space-x-2">
+            <span>Acheter $TTC</span>
+            <ArrowRight className="h-5 w-5" />
+          </button>
+          
+          <p className="text-center text-gray-400 text-xs mt-4">
+            Ceci est une simulation. Taux : 1 ETH = 10,000 TTC
+          </p>
+        </div>
+
       </div>
     </section>
   );
@@ -136,13 +205,13 @@ function AboutSection() {
 
 
 // --- COMPOSANT APP (Mis à jour) ---
-// Il affiche maintenant les deux sections, l'une après l'autre
 export default function App() {
   return (
     <ThirdwebProvider>
       <main>
         <Hero />
         <AboutSection />
+        <TokenomicsSection />
       </main>
     </ThirdwebProvider>
   );
