@@ -8,6 +8,7 @@ import {
   darkTheme,
 } from "@rainbow-me/rainbowkit";
 import { mainnet, baseSepolia } from "wagmi/chains";
+import { BrowserRouter } from "react-router-dom";
 import App from "./App";
 import "@rainbow-me/rainbowkit/styles.css";
 
@@ -28,7 +29,9 @@ ReactDOM.createRoot(document.getElementById("root")).render(
     <WagmiProvider config={config}>
       <QueryClientProvider client={queryClient}>
         <RainbowKitProvider theme={darkTheme()}>
-          <App />
+          <BrowserRouter>
+            <App />
+          </BrowserRouter>
         </RainbowKitProvider>
       </QueryClientProvider>
     </WagmiProvider>
