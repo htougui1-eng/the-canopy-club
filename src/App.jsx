@@ -2,7 +2,7 @@ import React, { useMemo, useState } from "react";
 import { Routes, Route, Link } from "react-router-dom";
 import { HashLink } from "react-router-hash-link";
 import { useAccount } from "wagmi";
-import { baseSepolia } from "wagmi/chains"; // On garde Base Sepolia
+import { baseSepolia } from "wagmi/chains"; // C'est le bon réseau
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import {
   ThirdwebProvider,
@@ -15,7 +15,7 @@ import {
   prepareContractCall,
   toWei,
 } from "thirdweb";
-import { toEther } from "thirdweb/utils"; // On garde toEther (18 décimales)
+import { toEther } from "thirdweb/utils"; // C'est correct pour 18 décimales
 import {
   Wallet, Target, Gem, Sprout, Coins, PieChart, ArrowRight,
   Database, Lock, Undo,
@@ -463,12 +463,13 @@ function ProjectPage() {
     return getContract({ client, chain: baseSepolia, address: TTC_CONTRACT });
   }, [client]);
 
+  // 🛑 --- LA CORRECTION EST ICI --- 🛑
   const { data: balanceData, isLoading: isBalanceLoading } = useReadContract({
     contract: ttcContract,
     method: "balanceOf",
-    params: { account: address || "0x0000000000000000000000000000000000000000" },
+    params: [address || "0x0000000000000000000000000000000000000000"],
     queryOptions: {
-      enabled: !!address, // Ne s'exécute que si l'adresse est connue
+      enabled: !!address, // Ne s'exécute que si 'address' existe
     }
   });
 
