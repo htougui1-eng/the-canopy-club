@@ -527,21 +527,8 @@ function DaoPage() {
   const [proposalTitle, setProposalTitle] = useState("");
   const [proposalDesc, setProposalDesc] = useState("");
 
-  const nftContract = useMemo(() => {
-    return getContract({ client, chain: baseSepolia, address: NFT_CONTRACT_ADDRESS });
-  }, [client]);
-
-  const daoContract = useMemo(() => {
-    return getContract({ client, chain: baseSepolia, address: DAO_CONTRACT_ADDRESS });
-  }, [client]);
-
-  const { data: nftBalance, isLoading: isNftBalanceLoading } = useReadContract({
-    contract: nftContract,
-    method: "balanceOf",
-    params: [address || ""],
-  });
-
-  const hasNft = nftBalance && Number(nftBalance) > 0;
+  const isNftBalanceLoading = false; 
+  const hasNft = true; // Simulation : Changez "true" à "false" pour tester l'affichage
 
   const proposals = [
     { id: 1, title: "Projet A : Financer la reforestation en Amazonie", description: "Allouer 10 ETH du fonds écologique." },
@@ -601,22 +588,12 @@ function DaoPage() {
                     placeholder="Expliquez votre proposition en détail..."
                   />
                 </div>
-                <TransactionButton
-                  transaction={() =>
-                    prepareContractCall({
-                      contract: daoContract,
-                      method: "propose",
-                      params: [proposalTitle, proposalDesc]
-                    })
-                  }
-                  onTransactionConfirmed={() => {
-                    setProposalTitle("");
-                    setProposalDesc("");
-                  }}
-                  className="!bg-green-500 !text-slate-900 !font-bold !py-2 !px-4 !rounded-lg !hover:bg-green-400"
+                <button
+                  onClick={() => alert("Simulation : Soumission de la proposition...")}
+                  className="w-full bg-green-500 text-slate-900 font-bold py-2 px-4 rounded-lg hover:bg-green-400"
                 >
-                  Soumettre la Proposition
-                </TransactionButton>
+                  Soumettre la Proposition (Simulation)
+                </button>
               </div>
             </div>
             
@@ -628,30 +605,16 @@ function DaoPage() {
                 <h3 className="text-2xl font-semibold mb-2">{proposal.title}</h3>
                 <p className="text-gray-400 mb-4">{proposal.description}</p>
                 <div className="flex space-x-4">
-                  <TransactionButton
-                    transaction={() =>
-                      prepareContractCall({
-                        contract: daoContract,
-                        method: "vote",
-                        params: [proposal.id, true],
-                      })
-                    }
-                    className="!bg-green-500 !text-slate-900 !font-bold !py-2 !px-4 !rounded-lg !hover:bg-green-400"
+                  <button
+                    className="bg-green-500 text-slate-900 font-bold py-2 px-4 rounded-lg hover:bg-green-400"
                   >
-                    Voter Pour
-                  </TransactionButton>
-                  <TransactionButton
-                    transaction={() =>
-                      prepareContractCall({
-                        contract: daoContract,
-                        method: "vote",
-                        params: [proposal.id, false],
-                      })
-                    }
-                    className="!bg-red-500 !text-white !font-bold !py-2 !px-4 !rounded-lg !hover:bg-red-400"
+                    Voter Pour (Simulation)
+                  </button>
+                  <button
+                    className="bg-red-500 text-white font-bold py-2 px-4 rounded-lg hover:bg-red-400"
                   >
-                    Voter Contre
-                  </TransactionButton>
+                    Voter Contre (Simulation)
+                  </button>
                 </div>
               </div>
             ))}
