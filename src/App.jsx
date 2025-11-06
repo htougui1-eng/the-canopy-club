@@ -2,7 +2,7 @@ import React, { useMemo, useState } from "react";
 import { Routes, Route, Link } from "react-router-dom";
 import { HashLink } from "react-router-hash-link";
 import { useAccount } from "wagmi";
-import { baseSepolia } from "wagmi/chains"; // C'est le bon réseau
+import { baseSepolia } from "wagmi/chains";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import {
   ThirdwebProvider,
@@ -15,7 +15,7 @@ import {
   prepareContractCall,
   toWei,
 } from "thirdweb";
-import { toEther } from "thirdweb/utils"; // C'est correct pour 18 décimales
+import { toEther } from "thirdweb/utils";
 import {
   Wallet, Target, Gem, Sprout, Coins, PieChart, ArrowRight,
   Database, Lock, Undo,
@@ -467,9 +467,9 @@ function ProjectPage() {
   const { data: balanceData, isLoading: isBalanceLoading } = useReadContract({
     contract: ttcContract,
     method: "balanceOf",
-    params: [address || "0x0000000000000000000000000000000000000000"],
+    params: [address], // On utilise le paramètre simple (array)
     queryOptions: {
-      enabled: !!address, // Ne s'exécute que si 'address' existe
+      enabled: !!address, // Ne s'exécute que si 'address' existe (n'est pas undefined)
     }
   });
 
