@@ -1,4 +1,5 @@
 import React, { useMemo, useState } from "react";
+import { Routes, Route, Link } from "react-router-dom";
 import { useAccount } from "wagmi";
 import { baseSepolia } from "wagmi/chains";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
@@ -18,7 +19,7 @@ import {
   Wallet, Target, Gem, Sprout, Coins, PieChart, ArrowRight,
   Database, Lock, Undo,
   Image, Store,
-  BookOpen, Rocket
+  BookOpen, Rocket, ChevronLeft
 } from "lucide-react";
 import "./App.css";
 
@@ -252,19 +253,18 @@ function WhitepaperSection() {
             <BookOpen className="h-5 w-5" />
             <span>Lire le Whitepaper</span>
           </a>
-          <a
-            href="/details" 
+          <Link
+            to="/details" 
             className="inline-flex items-center justify-center space-x-2 bg-slate-700 text-white font-bold py-3 px-8 rounded-lg text-lg hover:bg-slate-600 transition-all duration-300"
           >
             <span>En savoir plus</span>
             <ArrowRight className="h-5 w-5" />
-          </a>
+          </Link>
         </div>
       </div>
     </section>
   );
 }
-
 
 function ProjectPage() {
   const { address } = useAccount();
@@ -304,10 +304,42 @@ function ProjectPage() {
   );
 }
 
+function DetailsPage() {
+  return (
+    <div className="min-h-screen bg-slate-900 text-white p-8">
+      <div className="max-w-4xl mx-auto">
+        <Link to="/" className="inline-flex items-center text-green-400 hover:text-green-300 mb-8">
+          <ChevronLeft className="h-5 w-5 mr-2" />
+          Retour à l'accueil
+        </Link>
+        <h1 className="text-5xl font-bold mb-6">Détails du Projet</h1>
+        <div className="prose prose-invert prose-lg text-gray-300">
+          <p>
+            C'est ici que vous placerez tous les détails supplémentaires de votre projet.
+          </p>
+          <p>
+            Vous pouvez développer en profondeur votre mission, expliquer la technologie derrière
+            le staking, ou présenter en détail la roadmap de "The Canopy Club".
+          </p>
+          <h2>Roadmap Détaillée</h2>
+          <ul>
+            <li>Phase 1 : Lancement du token $TTC et de la collection NFT.</li>
+            <li>Phase 2 : Déploiement du contrat de Staking et partenariats écologiques.</li>
+            <li>Phase 3 : Lancement de la plateforme de vote (DAO).</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export default function App() {
   return (
     <ThirdwebProvider>
-      <ProjectPage />
+      <Routes>
+        <Route path="/" element={<ProjectPage />} />
+        <Route path="/details" element={<DetailsPage />} />
+      </Routes>
     </ThirdwebProvider>
   );
 }
