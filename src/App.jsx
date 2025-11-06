@@ -21,7 +21,7 @@ import {
   Database, Lock, Undo,
   Image, Store,
   BookOpen, Rocket, ChevronLeft,
-  Vote, Flame, ClipboardCopy, Map, HelpCircle, CheckCircle
+  Vote, Flame, ClipboardCopy, Map, HelpCircle, CheckCircle, PlusCircle
 } from "lucide-react";
 import "./App.css";
 
@@ -524,7 +524,8 @@ function DetailsPage() {
 
 function DaoPage() {
   const { address } = useAccount();
-  const [selectedProposal, setSelectedProposal] = useState(null);
+  const [proposalTitle, setProposalTitle] = useState("");
+  const [proposalDesc, setProposalDesc] = useState("");
 
   const nftContract = useMemo(() => {
     return getContract({ client, chain: baseSepolia, address: NFT_CONTRACT_ADDRESS });
@@ -569,8 +570,59 @@ function DaoPage() {
         {!address ? (
           <p className="text-lg text-gray-400">Veuillez connecter votre wallet pour participer.</p>
         ) : hasNft ? (
-          <div className="space-y-6">
-            <p className="text-lg text-green-400">Statut : Déteneur de NFT vérifié. Vous pouvez voter.</p>
+          <div className="space-y-8">
+            <p className="text-lg text-green-400">Statut : Déteneur de NFT vérifié. Vous pouvez voter et soumettre des propositions.</p>
+            
+            <div className="bg-slate-800 p-6 rounded-lg">
+              <h3 className="text-2xl font-semibold mb-4 flex items-center">
+                <PlusCircle className="h-6 w-6 mr-2 text-green-400" />
+                Soumettre une Nouvelle Proposition
+              </h3>
+              <div className="space-y-4">
+                <div>
+                  <label htmlFor="title" className="block text-sm font-medium text-gray-300 mb-1">Titre de la Proposition</label>
+                  <input 
+                    type="text" 
+                    id="title"
+                    value={proposalTitle}
+                    onChange={(e) => setProposalTitle(e.target.value)}
+                    className="w-full p-3 rounded-md bg-slate-900 border border-slate-700 text-white focus:outline-none focus:ring-2 focus:ring-green-400"
+                    placeholder="Ex: Financer le Projet X"
+                  />
+                </div>
+                <div>
+                  <label htmlFor="description" className="block text-sm font-medium text-gray-300 mb-1">Description</label>
+                  <textarea 
+                    id="description"
+                    rows={4}
+                    value={proposalDesc}
+                    onChange={(e) => setProposalDesc(e.target.value)}
+                    className="w-full p-3 rounded-md bg-slate-900 border border-slate-700 text-white focus:outline-none focus:ring-2 focus:ring-green-400"
+                    placeholder="Expliquez votre proposition en détail..."
+                  />
+                </div>
+                <TransactionButton
+                  transaction={() =>
+                    prepareContractCall({
+                      contract: daoContract,
+                      method: "propose",
+                      params: [proposalTitle, proposalDesc]
+                    })
+                  }
+                  onTransactionConfirmed={() => {
+                    setProposalTitle("");
+                    setProposalDesc("");
+                  }}
+                  className="!bg-green-500 !text-slate-900 !font-bold !py-2 !px-4 !rounded-lg !hover:bg-green-400"
+                >
+                  Soumettre la Proposition
+                </TransactionButton>
+              </div>
+            </div>
+            
+            <hr className="border-slate-700" />
+
+            <h2 className="text-3xl font-bold">Propositions Actuelles</h2>
             {proposals.map((proposal) => (
               <div key={proposal.id} className="bg-slate-800 p-6 rounded-lg">
                 <h3 className="text-2xl font-semibold mb-2">{proposal.title}</h3>
