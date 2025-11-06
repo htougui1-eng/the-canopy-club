@@ -221,32 +221,32 @@ function TokenomicsSection() {
           <div className="flex items-center bg-slate-800 p-4 rounded-lg">
             <PieChart className="text-green-400 h-6 w-6 mr-4 flex-shrink-0" />
             <span className="font-bold text-lg">Supply Totale :</span>
-            <span className="ml-auto text-lg text-green-400">10,000,000,000 TTC</span>
+            <span className="ml-auto text-lg text-green-400">10 Milliards TTC</span>
           </div>
           <div className="flex items-center bg-slate-800 p-4 rounded-lg">
             <Coins className="text-green-400 h-6 w-6 mr-4 flex-shrink-0" />
             <span className="font-bold text-lg">Prévente :</span>
-            <span className="ml-auto text-lg">50% (5,000,000,000 TTC)</span>
+            <span className="ml-auto text-lg">50% (5 Milliards TTC)</span>
           </div>
           <div className="flex items-center bg-slate-800 p-4 rounded-lg">
             <Image className="text-green-400 h-6 w-6 mr-4 flex-shrink-0" />
             <span className="font-bold text-lg">NFT Holders :</span>
-            <span className="ml-auto text-lg">20% (2,000,000,000 TTC)</span>
+            <span className="ml-auto text-lg">20% (2 Milliards TTC)</span>
           </div>
           <div className="flex items-center bg-slate-800 p-4 rounded-lg">
             <Sprout className="text-green-400 h-6 w-6 mr-4 flex-shrink-0" />
             <span className="font-bold text-lg">Marketing / Communauté :</span>
-            <span className="ml-auto text-lg">10% (1,000,000,000 TTC)</span>
+            <span className="ml-auto text-lg">10% (1 Milliard TTC)</span>
           </div>
           <div className="flex items-center bg-slate-800 p-4 rounded-lg">
             <Gem className="text-green-400 h-6 w-6 mr-4 flex-shrink-0" />
             <span className="font-bold text-lg">Équipe :</span>
-            <span className="ml-auto text-lg">5% (500,000,000 TTC)</span>
+            <span className="ml-auto text-lg">5% (500 Millions TTC)</span>
           </div>
            <div className="flex items-center bg-slate-800 p-4 rounded-lg">
             <Lock className="text-green-400 h-6 w-6 mr-4 flex-shrink-0" />
             <span className="font-bold text-lg">Réserve / Trésorerie / Liquidité :</span>
-            <span className="ml-auto text-lg">15% (1,500,000,000 TTC)</span>
+            <span className="ml-auto text-lg">15% (1.5 Milliards TTC)</span>
           </div>
         </div>
       </div>
@@ -546,6 +546,7 @@ function DaoPage() {
     { id: 1, title: "Projet A : Financer la reforestation en Amazonie", description: "Allouer 10 ETH du fonds écologique." },
     { id: 2, title: "Projet B : Partenariat avec 'SolarTech'", description: "Investir dans une nouvelle technologie de panneaux solaires." },
     { id: 3, title: "Projet C : Campagne Marketing", description: "Augmenter le budget marketing de 5 ETH pour le Q1." },
+    { id: 4, title: "Projet D : Audit de Sécurité du Contrat de Staking", description: "Allouer 1 ETH pour un audit par 'CertiK'." },
   ];
 
   if (isNftBalanceLoading) {
