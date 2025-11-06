@@ -527,8 +527,8 @@ function DaoPage() {
   const [proposalTitle, setProposalTitle] = useState("");
   const [proposalDesc, setProposalDesc] = useState("");
 
-  const isNftBalanceLoading = false; 
-  const hasNft = true; // Simulation : Changez "true" à "false" pour tester l'affichage
+  const isNftBalanceLoading = false;
+  const hasNft = true; // Simulation: Changez "true" à "false" pour tester
 
   const proposals = [
     { id: 1, title: "Projet A : Financer la reforestation en Amazonie", description: "Allouer 10 ETH du fonds écologique." },
@@ -606,11 +606,13 @@ function DaoPage() {
                 <p className="text-gray-400 mb-4">{proposal.description}</p>
                 <div className="flex space-x-4">
                   <button
+                    onClick={() => alert("Simulation : Vote 'Pour' enregistré.")}
                     className="bg-green-500 text-slate-900 font-bold py-2 px-4 rounded-lg hover:bg-green-400"
                   >
                     Voter Pour (Simulation)
                   </button>
                   <button
+                    onClick={() => alert("Simulation : Vote 'Contre' enregistré.")}
                     className="bg-red-500 text-white font-bold py-2 px-4 rounded-lg hover:bg-red-400"
                   >
                     Voter Contre (Simulation)
