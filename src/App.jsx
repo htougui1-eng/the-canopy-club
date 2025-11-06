@@ -215,6 +215,159 @@ function TokenomicsSection() {
   );
 }
 
+function StakingSection({ address, isLoading: isAppLoading, ttcBalance, symbol, ttcContract, stakingContract }) {
+  const [activeTab, setActiveTab] = useState("stake"); 
+  const [stakeAmount, setStakeAmount] = useState("");
+  const [unstakeAmount, setUnstakeAmount] = useState("");
+
+  const stakedBalanceData = null; 
+  const isStakedBalanceLoading = false; 
+
+  const stakedBalance = stakedBalanceData ? toEther(stakedBalanceData) : "0";
+  const walletBalance = ttcBalance ? toEther(ttcBalance) : "0";
+
+  const isLoading = isAppLoading || isStakedBalanceLoading;
+
+  return (
+    <section id="staking" className="bg-slate-950 text-white py-20 px-8">
+      <div className="max-w-xl mx-auto">
+        <h2 className="text-4xl font-bold text-center mb-8">
+          Staking <span className="text-green-400">$TTC</span>
+        </h2>
+        {isLoading ? (
+          <p className="text-center">Chargement du module de Staking...</p>
+        ) : (
+          <>
+            <div className="bg-slate-800 p-6 rounded-lg shadow-lg mb-8 text-center">
+              <Lock className="text-green-400 h-10 w-10 mx-auto mb-3" />
+              <h3 className="text-lg text-gray-400">Votre Solde Staké</h3>
+              <p className="text-3xl font-bold text-green-400">
+                {stakedBalance} {symbol}
+              </p>
+            </div>
+            <div className="bg-slate-900 p-8 rounded-lg shadow-2xl">
+              <div className="flex mb-6 border-b border-slate-700">
+                <button
+                  onClick={() => setActiveTab("stake")}
+                  className={`py-3 px-6 text-lg font-semibold ${
+                    activeTab === "stake"
+                      ? "border-b-2 border-green-400 text-green-400"
+                      : "text-gray-500 hover:text-gray-300"
+                  }`}
+                >
+                  <Database className="h-5 w-5 inline mr-2" />
+                  Stake
+                </button>
+                <button
+                  onClick={() => setActiveTab("unstake")}
+                  className={`py-3 px-6 text-lg font-semibold ${
+                    activeTab === "unstake"
+                      ? "border-b-2 border-green-400 text-green-400"
+                      : "text-gray-500 hover:text-gray-300"
+                  }`}
+                >
+                  <Undo className="h-5 w-5 inline mr-2" />
+                  Unstake
+                </button>
+              </div>
+              {activeTab === "stake" && (
+                <div>
+                  <div className="flex justify-between items-baseline mb-2">
+                    <label htmlFor="stakeAmount" className="block text-sm font-medium text-gray-300">
+                      Montant à Staker
+                    </label>
+                    <span className="text-xs text-gray-400">
+                      Solde: {walletBalance} {symbol}
+                    </span>
+                  </div>
+                  <div className="flex space-x-2">
+                    <input 
+                      type="number" 
+                      id="stakeAmount"
+                      value={stakeAmount}
+                      onChange={(e) => setStakeAmount(e.target.value)}
+                      placeholder="0" 
+                      className="flex-grow p-3 rounded-md bg-slate-800 border border-slate-700 text-white focus:outline-none focus:ring-2 focus:ring-green-400"
+                    />
+                    <button 
+                      onClick={() => setStakeAmount(walletBalance)}
+                      className="px-4 py-2 bg-slate-700 rounded-md text-sm font-bold hover:bg-slate-600"
+                    >
+                      Max
+                    </button>
+                  </div>
+                  <TransactionButton
+                    transaction={() =>
+                      prepareContractCall({
+                        contract: stakingContract,
+                        method: "stake", 
+                        params: [toWei(stakeAmount || "0")], 
+                      })
+                    }
+                    onTransactionSent={() => console.log("Transaction envoyée...")}
+                    onTransactionConfirmed={() => {
+                      console.log("Staking réussi !");
+                      setStakeAmount("");
+                    }}
+                    className="!w-full !bg-green-500 !text-slate-900 !font-bold !py-3 !rounded-lg !text-lg !mt-6 !hover:bg-green-400 !transition-all !duration-300"
+                  >
+                    Staker {stakeAmount || 0} {symbol}
+                  </TransactionButton>
+                </div>
+              )}
+              {activeTab === "unstake" && (
+                <div>
+                  <div className="flex justify-between items-baseline mb-2">
+                    <label htmlFor="unstakeAmount" className="block text-sm font-medium text-gray-300">
+                      Montant à "Unstake"
+                    </label>
+                    <span className="text-xs text-gray-400">
+                      Staké: {stakedBalance} {symbol}
+                    </span>
+                  </div>
+                  <div className="flex space-x-2">
+                    <input 
+                      type="number" 
+                      id="unstakeAmount"
+                      value={unstakeAmount}
+                      onChange={(e) => setUnstakeAmount(e.target.value)}
+                      placeholder="0" 
+                      className="flex-grow p-3 rounded-md bg-slate-800 border border-slate-700 text-white focus:outline-none focus:ring-2 focus:ring-green-400"
+                    />
+                    <button 
+                      onClick={() => setUnstakeAmount(stakedBalance)}
+                      className="px-4 py-2 bg-slate-700 rounded-md text-sm font-bold hover:bg-slate-600"
+                    >
+                      Max
+                    </button>
+                  </div>
+                  <TransactionButton
+                    transaction={() =>
+                      prepareContractCall({
+                        contract: stakingContract,
+                        method: "unstake", 
+                        params: [toWei(unstakeAmount || "0")],
+                      })
+                    }
+                    onTransactionSent={() => console.log("Transaction envoyée...")}
+                    onTransactionConfirmed={() => {
+                      console.log("Unstake réussi !");
+                      setUnstakeAmount("");
+                    }}
+                    className="!w-full !bg-gray-500 !text-white !font-bold !py-3 !rounded-lg !text-lg !mt-6 !hover:bg-gray-400 !transition-all !duration-300"
+                  >
+                    Unstake {unstakeAmount || 0} {symbol}
+                  </TransactionButton>
+                </div>
+              )}
+            </div>
+          </>
+        )}
+      </div>
+    </section>
+  );
+}
+
 function NftSection() {
   const nftPreviews = [
     { id: 1, name: "Canopy Sloth #001", description: "Un paresseux rare avec une fourrure dorée." },
@@ -298,6 +451,7 @@ function WhitepaperSection() {
   );
 }
 
+
 function ProjectPage() {
   const { address } = useAccount();
 
@@ -348,7 +502,7 @@ function DetailsPage() {
         <div className="prose prose-invert prose-lg text-gray-300">
           <p>
             C'est ici que vous placerez tous les détails supplémentaires de votre projet.
-          </Détails>
+          </p>
           <p>
             Vous pouvez développer en profondeur votre mission, expliquer la technologie derrière
             le staking, ou présenter en détail la roadmap de "The Canopy Club".
